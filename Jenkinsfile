@@ -7,7 +7,7 @@ pipeline{
     stages{
         stage("Clone The Code in Github"){
             steps {
-                echo "Code is Cloned Successfully"
+                echo "Code is Cloned Successfully edit"
             }
         }
         
