@@ -66,7 +66,7 @@ pipeline {
         echo 'Building Docker image...'
         
         sh '''
-        chmod +x /var/run/docker.sock
+        sudo usermod -aG docker jenkins
         docker build -t terraform-notes-app:latest .
         '''
       }
