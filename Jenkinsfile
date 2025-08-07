@@ -75,11 +75,11 @@ stage("Build Image in Docker") {
     stage("Deploy to Docker Hub"){
       steps {
         echo 'Pushing Docker image to Docker Hub...'
-        withCredentials([usernamePassword(credentialsId: 'dockerHubCred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+        withCredentials([usernamePassword(credentialsId: 'dockerHubCred', usernameVariable: 'dockerHubUser', passwordVariable: 'dockerHubPass')]) {
           sh '''
-            docker login -u ${env.DOCKER_USERNAME} -p ${env.DOCKER_PASSWORD}
-            docker tag terraform-notes-app:latest ${env.DOCKER_USERNAME}/terraform-notes-app:latest
-            docker push ${env.DOCKER_USERNAME}/terraform-notes-app:latest
+            docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}
+            docker tag terraform-notes-app:latest ${env.dockerHubUser}/terraform-notes-app:latest
+            docker push ${env.dockerHubUser}/terraform-notes-app:latest
           '''
         }
       }
