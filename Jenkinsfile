@@ -64,7 +64,11 @@ pipeline {
     stage("Build Image in Docker"){
       steps {
         echo 'Building Docker image...'
-        sh 'docker build -t terraform-notes-app:latest .'
+        
+        sh '''
+        sudo chmod +x /var/run/docker.sock
+        docker build -t terraform-notes-app:latest .
+        '''
       }
     }
 
