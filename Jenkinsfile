@@ -60,17 +60,17 @@ pipeline {
       }
     }
 
+stage("Build Image in Docker") {
+  steps {
+    echo 'Building Docker image...'
+    
+    sh '''
+    docker --version
+    docker build -t terraform-notes-app:latest .
+    '''
+  }
+}
 
-    stage("Build Image in Docker"){
-      steps {
-        echo 'Building Docker image...'
-        
-        sh '''
-        sudo usermod -aG docker jenkins
-        docker build -t terraform-notes-app:latest .
-        '''
-      }
-    }
 
     stage("Deploy to Docker Hub"){
       steps {
