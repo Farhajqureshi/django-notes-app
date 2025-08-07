@@ -56,9 +56,37 @@ pipeline {
         # verify and run scan
         trivy fs --format table -o trivy-fs-report.json .
       '''
+           }
+      }
     }
+
+
+    stage("Build Image in Docker"){
+      steps {
+        echo 'Building Docker image...'
+        sh 'docker build -t terraform-notes-app:latest .'
       }
+    }
+
+    stage("Deploy to Docker Hub"){
+      steps {
+        echo 'Pushing Docker image to Docker Hub...'
+        withCredentials([usernamePassword(credentialsId: 'dockerHubCred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+          sh '''
+            docker login -u ${env.DOCKER_USERNAME} -p ${env.DOCKER_PASSWORD}
+            docker tag terraform-notes-app:latest ${env.DOCKER_USERNAME}/terraform-notes-app:latest
+            docker push ${env.DOCKER_USERNAME}/terraform-notes-app:latest
+          '''
+        }
       }
+    }
+
+    stage("Deploy to AWS EC2"){
+      steps {
+        echo 'Deploying to AWS EC2...'
+        sh "docker compose up -d"
+      }
+    }
   }
 
   post {
